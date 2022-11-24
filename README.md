@@ -10,11 +10,19 @@ function test(){
 }
 ```
 
+## test.css 
+```css
+html,body{
+  margin:0;
+  padding:0;
+}
+```
+
 ## index.html  |  Call View 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/HasanDelibas/AsenacView@main/Asenac.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/HasanDelibas/asenac-view@v1.0.0/asenac.js"></script>
 <script>
-  Asenac("path/to/test.js").then( ()=>{
+  Asenac("path/to/test.js","path/to/test.css").then( ()=>{
     document.body.append( test() )
   })
 </script>
