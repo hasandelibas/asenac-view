@@ -148,20 +148,60 @@ function Asenac(url) {
     return out;
   }
 
+  function Request(url){
+    return new Promise((resolve,reject)=>{
+      // Fetch without Cache
+      fetch(url+"?"+Math.random(),{
+        method:"GET",
+        headers:{
+          "Cache-Control":"no-cache"
+        }
+      }).then(res=>{
+        // css
+        if(res.headers.get("content-type").split(";")[0]=="text/css"){
+          return new Promise((resolve,reject)=>{
+            res.text().then(text=>{
+              resolve({
+                type: "css",
+                text: text
+              });
+            })
+          })
+        }
+        // js
+        if(res.headers.get("content-type").split(";")[0]=="application/javascript"){
+          return new Promise((resolve,reject)=>{
+            res.text().then(text=>{
+              resolve({
+                type: "js",
+                text: text
+              });
+            })
+          })
+        }
+      }).then( ({type,text})=>{
+        if(type=="css"){
+          let style = document.createElement("style");
+          style.innerHTML = text;
+          document.head.appendChild(style);
+          resolve();
+        }
+        if(type=="js"){
+          let code = Convert(text);
+          var script = document.createElement('script');
+          script.innerHTML = code;
+          document.body.appendChild(script);
+          resolve();
+        }
+      });
+    })
+  }
 
-  return new Promise((resolve,reject)=>{
-    // Fetch without Cache
-    fetch(url+"?"+Math.random(),{
-      method:"GET",
-      headers:{
-        "Cache-Control":"no-cache"
-      }
-    }).then(res=>res.text()).then(html=>{
-      let code = Convert(html);
-      var script = document.createElement('script');
-      script.innerHTML = code;
-      document.body.appendChild(script);
-      resolve();
-    });
-  })
+  // each arguments
+  let promises = [];
+  for(let i=0;i<arguments.length;i++){
+    let url = arguments[i];
+    promises.push(Request(url));
+  }
+  return Promise.all(promises);
 }
