@@ -158,7 +158,7 @@ function Asenac(url) {
         }
       }).then(res=>{
         // css
-        if(res.headers.get("content-type").split(";")[0]=="text/css"){
+        if(res.headers.get("content-type").split(";")[0]=="text/css" || url.endsWith(".css")){
           return new Promise((resolve,reject)=>{
             res.text().then(text=>{
               resolve({
@@ -169,7 +169,7 @@ function Asenac(url) {
           })
         }
         // js
-        if(res.headers.get("content-type").split(";")[0]=="application/javascript"){
+        if(res.headers.get("content-type").split(";")[0]=="application/javascript" || url.endsWith(".js")){
           return new Promise((resolve,reject)=>{
             res.text().then(text=>{
               resolve({
