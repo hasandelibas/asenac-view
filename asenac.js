@@ -146,7 +146,7 @@ Asenac.Build = function(code){
   return out;
 } // End of Asenac.Build
 
-function Asenac(url) {
+Asenac.Import = function(url) {
 
 
   function Request(url){
